@@ -1,0 +1,17 @@
+.container-fluid{
+	padding:0px;
+	background-color: #b3ecff;
+}
+.imageLogo{
+	width:100%;
+	height:auto;
+	max-width:125%;
+}
+#dataHeader{
+	padding-left:0px;
+}
+#dataWords{
+	margin-top:0px;
+	margin-bottom:-8px;
+	font-weight:bold;
+}
