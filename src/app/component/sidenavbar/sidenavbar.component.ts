@@ -21,27 +21,15 @@ export class SidenavbarComponent implements OnInit {
   constructor(private imageselection: ImageselectionService,
   private sanitizer: DomSanitizer) {
     this.selectedRows=function(item:any){
-      this.imageselection.getDeviceImageList(item.DEVICE_NAME).subscribe(deviceImageList =>{
+    this.imageselection.getDeviceImageList(item.dev_name).subscribe(deviceImageList =>{
        this.deviceImageList = deviceImageList;
        for(var i=0;i<this.deviceImageList.length;i++){
-         this.deviceImageList[i].FILEPATH = this.sanitizer.bypassSecurityTrustUrl('data:image/jpeg;charset=utf-8;base64,' + this.deviceImageList[i].FILEPATH);
-         this.deviceImageList[i].timestamp = (new Date(Date.parse(this.deviceImageList[i].CREATED_AT))).getTime();
-       }
-       console.log(this.deviceImageList);
+         this.deviceImageList[i].file_path = this.sanitizer.bypassSecurityTrustUrl('data:image/jpeg;charset=utf-8;base64,' + this.deviceImageList[i].file_path);
+         this.deviceImageList[i].timestamp = new Date(0).setUTCSeconds(this.deviceImageList[i].timestamp);
+         }
        })
     }
    }
-
-
-
-  
-
-
-   /*public getSantizeUrl(url : string) {
-
-    url = 'data:image/jpeg;charset=utf-8;base-64,'+url;
-    return this.sanitizer.bypassSecurityTrustUrl(url);
-   }*/
 
   populateImageList() {
     this.imageselection.getImageList().subscribe(imageList => {

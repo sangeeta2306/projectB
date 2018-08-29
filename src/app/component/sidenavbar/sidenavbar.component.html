@@ -3,12 +3,11 @@
     <div style="max-height:400px;overflow-y: auto;">
     <mat-list>
       <mat-list-item class="btn-group-vertical" *ngFor="let item of deviceList">
-                <button type="button" class="btn btn-primary" (click)="selectedRows(item)">{{item.DEVICE_NAME}}</button>
+                <button type="button" class="btn btn-primary" (click)="selectedRows(item)">{{item.dev_name}}</button>
       </mat-list-item>
     </mat-list>
     </div>
   </div>
-
 
 <div fxFlex="85%">
     <div class="container" fxFill fxLayout="column" fxLayout.xs="column" fxLayoutAlign="space-evenly stretch" fxLayoutWrap fxLayoutGap="1%">
@@ -17,13 +16,12 @@
       <div class="container-fluid">
         <div class="row">
           <div *ngFor="let image of item.value" class="col-xs-6 col-sm-6 col-md-3 col-lg-3" style="margin-bottom:5px;">
-            <a href="#{{image.id}}" class="lighbox">
-            <img [src]="image.FILEPATH" alt="Card image cap" style="width:100%;height:150px;">
+            <a href="#{{image.ID}}" class="lighbox">
+            <img [src]="image.file_path" alt="Card image cap" style="width:100%;height:150px;">
             </a>
-            <div class="lightbox-target" id="{{image.id}}">
-              <img [src]="image.FILEPATH"/>
+            <div class="lightbox-target" id="{{image.ID}}">
+              <img [src]="image.file_path"/>
               <a class="lightbox-close" href="#"></a>
-              <p id="filename">{{image.FILE_NAME}}</p>
             </div>
           </div>
         </div>

@@ -25,6 +25,7 @@ export class ImageselectionService {
   return this.http.get('/api/imagelist/'+id)
   .pipe(map(res=>res.json()))
   };
+
 }
 
 
