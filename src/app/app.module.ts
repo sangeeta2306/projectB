@@ -11,7 +11,6 @@ import { HttpModule } from '@angular/http';
 import { SidenavbarComponent } from './component/sidenavbar/sidenavbar.component';
 import { GroupbypipePipe } from './pipe/groupbypipe.pipe';
 
-
 @NgModule({
   declarations: [
     AppComponent,
