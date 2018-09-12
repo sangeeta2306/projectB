@@ -8,10 +8,13 @@ const api= require('./server/routes/api');
 const app = express();
 var server = require('http').Server(app);
 var io = require('socket.io')(server);
-const testFolder = '/home/pcadmin/Downloads/Test2/';
+var glob = require('glob');
 const fs= require('fs');
+var serverFolder = '/home/pcadmin/Desktop/ProjectB/server/saved_video_SBC_4/';
+var clientFolder = '/home/pcadmin/Desktop/ProjectB/client/colour_images/';
 server.listen(3000);
 //parsers for POST data
+
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
 
@@ -23,10 +26,10 @@ app.use(function(req, res, next) {
 });
 io.on('connection', function(socket) {
   console.log('A new WebSocket connection has been established');
-  require('chokidar').watch('/home/pcadmin/Desktop/projectb/saved_images_SBC_200', {
+  require('chokidar').watch(serverFolder, {
 	ignored:['basler_camera.py',/[\/\\]\./],
 	usePolling: true,
-	interval : 20
+	interval : 30
    }).on('add', path=> {
    	if(fs.statSync(path).isFile()){
     path = new Buffer(fs.readFileSync(path)).toString("base64");
@@ -34,6 +37,43 @@ io.on('connection', function(socket) {
     }
 });
 });
+
+function deleteServerFiles(){
+  var glob = require('glob');
+  var time = Math.round(Date.now()/1000)-5;
+          let v = serverFolder+time+'*.jpg'; 
+          glob(v,function(err,files){
+          for(var i=0;i<files.length;i++){
+            if(fs.statSync(files[i]).isFile()){
+              fs.unlinkSync(files[i]);  
+              console.log("successfully removed "+files[i]);
+            }else{
+              console.log("error");
+            }
+          }
+    })
+
+};
+function deleteClientFiles(){
+  var glob = require('glob');
+  var time = Math.round(Date.now()/1000)-5;
+          let v = clientFolder+time+'*.jpg'; 
+          glob(v,function(err,files){
+          for(var i=0;i<files.length;i++){
+            if(fs.statSync(files[i]).isFile()){
+              fs.unlinkSync(files[i]);  
+              console.log("successfully removed "+files[i]);
+            }else{
+              console.log("error");
+            }
+          }
+    })
+
+};
+//deleteServerFiles();
+//deleteClientFiles();
+//setInterval(function(){deleteServerFiles()},1000);
+//setInterval(function(){deleteClientFiles()},1000);
 
 //points static path to dist:
 app.use(express.static(path.join(__dirname,'dist')));

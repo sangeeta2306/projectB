@@ -27,7 +27,7 @@ export class SidenavbarComponent implements OnInit {
   timerone : AnonymousSubscription;
   socket:SocketIOClient.Socket;
   fileName:any=[];
-  
+  resp:any = [];
   constructor(private imageselection: ImageselectionService,
   private sanitizer: DomSanitizer) {
     this.socket = io.connect("http://localhost:3000/");
@@ -56,6 +56,7 @@ export class SidenavbarComponent implements OnInit {
   populateDeviceList(){
   this.imageselection.getDeviceList().subscribe(deviceList =>{
      this.deviceList = deviceList;
+     this.selectedRows(this.deviceList[0]);
   })
   };
   

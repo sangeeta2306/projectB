@@ -10,22 +10,18 @@
   </div>
 
 <div fxFlex="85%">
+  <div class="container" fxFill fxLayout="column" fxLayout.xs="column" fxLayoutAlign="space-evenly stretch" fxLayoutWrap fxLayoutGap="1%" style="margin-top:-21%">
+  <mat-card>
+  <img [src]="fileName" #slide id="slide" style="width:200px;height:200px">
+  </mat-card>
 
-
-  <div class="container" fxFill fxLayout="column" fxLayout.xs="column" fxLayoutAlign="space-evenly stretch" fxLayoutWrap fxLayoutGap="1%">
-  <div style="margin-bottom:25px">
-  <div style="width:300px;height:300px;border:1px solid black">
-  <img [src]="fileName" #slide id="slide" style="width:300px;height:300px">
-  </div>
-  </div>
-  </div> 
-<div class="container" fxFill fxLayout="column" fxLayout.xs="column" fxLayoutAlign="space-evenly stretch" fxLayoutWrap fxLayoutGap="1%">
-      <mat-card *ngFor="let item of deviceImageList| groupbypipe:'timestamp'">
-      <mat-card-subtitle><strong>{{item.key | date:'medium'}}</strong></mat-card-subtitle>
-      <div class="container-fluid">
+<div style="height:450px;overflow-y: auto">
+  <mat-card class="mat-elevation-z8" *ngFor="let item of (deviceImageList| reverse) |  groupbypipe:'timestamp'">
+  <mat-card-subtitle><strong>{{item.key | date:'medium'}}</strong></mat-card-subtitle>
+  <div class="container-fluid">
         <div class="row">
           <div *ngFor="let image of item.value" class="col-xs-6 col-sm-6 col-md-3 col-lg-3" style="margin-bottom:5px;">
-            <div style="width:100%;height:150px;border:1px solid black">
+            <div style="width:100%;height:150px">
             <a href="#{{image.ID}}" class="lighbox">
             <img [src]="image.file_path" alt="{{image.fileName}} not found" style="width:100%;height:150px;">
             </a>

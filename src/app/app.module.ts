@@ -10,6 +10,7 @@ import { FooterComponent } from './component/footer/footer.component';
 import { HttpModule } from '@angular/http';
 import { SidenavbarComponent } from './component/sidenavbar/sidenavbar.component';
 import { GroupbypipePipe } from './pipe/groupbypipe.pipe';
+import {NgPipesModule} from 'ngx-pipes';
 
 @NgModule({
   declarations: [
@@ -21,7 +22,7 @@ import { GroupbypipePipe } from './pipe/groupbypipe.pipe';
     ],
   imports: [
     BrowserModule, BrowserAnimationsModule, HttpModule, MatMenuModule, MatButtonModule, MatIconModule, MatCardModule, MatSidenavModule,MatToolbarModule,MatListModule,
-    FlexLayoutModule
+    FlexLayoutModule,NgPipesModule
   ],
   providers: [],
   bootstrap: [AppComponent]
