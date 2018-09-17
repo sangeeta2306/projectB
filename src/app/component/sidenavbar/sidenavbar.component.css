@@ -143,3 +143,13 @@ max-width: 100%;
 top: 0px;
 }
 
+.card {
+  background: white;
+  text-decoration: none;
+  color: #444;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  display: flex;
+  flex-direction: column;
+  padding:5px 10px;
+}
+

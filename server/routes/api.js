@@ -40,10 +40,9 @@ router.get('/images', function (req, res) {
 });
 
 router.get('/imagelist/:id',async function(req,res){
-  //changed to distinct to fetch only one cpy of each file
     var id = req.params.id;
     var sql = 'select * from img_tbl where dev_name="'+id+'"';
-    connection.query(sql, function(err,results,fields){
+    connection.query(sql, function(err,results,rows){
         if(err) throw console.log(err);
         for(var i=0;i<results.length;i++){
         results[i].fileName = results[i].file_path.split("/").pop(); 

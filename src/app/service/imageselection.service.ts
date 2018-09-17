@@ -26,10 +26,6 @@ export class ImageselectionService {
   .pipe(map(res=>res.json()))
   };
 
- /* deleteFiles(){
-  return this.http.delete('/api/removeFiles')
-  .pipe(map(res=>res.json()))
-  };*/
 }
 
 

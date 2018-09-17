@@ -9,12 +9,15 @@
     </div>
   </div>
 
-<div fxFlex="60%">
- <div class="container" fxFill fxLayout="column" fxLayout.xs="column" fxLayoutAlign="space-evenly stretch" fxLayoutWrap fxLayoutGap="1%" style="margin-top:-21%;">
-  <div style="height:550px;overflow-y: auto !important">
-  <!-- <h4>Images for <span>{{deviceName.dev_name}}</span></h4> 
-   --><mat-card class="card" *ngFor="let item of (deviceImageList| reverse) |  groupbypipe:'timestamp'" style="margin-bottom:5px">
-  <mat-card-subtitle style="margin-bottom:3px"><strong>{{item.key | date:'medium'}}</strong></mat-card-subtitle>
+<div fxFlex="85%">
+  <div class="container" fxFill fxLayout="column" fxLayout.xs="column" fxLayoutAlign="space-evenly stretch" fxLayoutWrap fxLayoutGap="1%" style="margin-top:-21%">
+  <mat-card>
+  <img [src]="fileName" #slide id="slide" style="width:200px;height:200px">
+  </mat-card>
+
+<div style="height:450px;overflow-y: auto">
+  <mat-card class="mat-elevation-z8" *ngFor="let item of (deviceImageList| reverse) |  groupbypipe:'timestamp'">
+  <mat-card-subtitle><strong>{{item.key | date:'medium'}}</strong></mat-card-subtitle>
   <div class="container-fluid">
         <div class="row">
           <div *ngFor="let image of item.value" class="col-xs-6 col-sm-6 col-md-3 col-lg-3" style="margin-bottom:5px;">
@@ -32,15 +35,6 @@
       </div>
     </mat-card>
   </div>
- </div>
-</div>
-<div fxFlex="23%" style="margin-top:-21%">
-  <div class="container">
-  <mat-card>
-  <img [src]="fileName" #slide id="slide" style="width:200px;height:200px">
-   <button #playVideo id="playVideo" type="button" class="btn btn-primary" style="margin:4px 60px" (click)="videoPlay()">Play</button>
-  </mat-card>
-</div>
 </div>
 </div>
 
