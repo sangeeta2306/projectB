@@ -16,13 +16,12 @@ var spawn = require('child_process').spawn;
 var rimraf = require('rimraf');
 //Use these lines if the folder path is determined by the IP address of the machine
 
-var ip= require('ip').address().split('.').pop();
-/*var serverVideoFolder = '/home/pcadmin/Desktop/ProjectB/server/saved_video_SBC_'+ip+'/';
-var serverImageFolder = '/home/pcadmin/Desktop/ProjectB/server/saved_images_SBC_'+ip+'/';
-*/
+//var ip= require('ip').address().split('.').pop();
+var ip='199';
 
 
-var serverVideoFolder = '/home/pcadmin/Desktop/ProjectB/server/saved_video_SBC_'+ip+'/';
+//var serverVideoFolder = '/home/pcadmin/Desktop/ProjectB/server/saved_video_SBC_'+ip+'/';
+var serverVideoFolder = '/home/pcadmin/Desktop/ProjectB/server/saved_video_SBC_199/';
 var serverImageFolder = '/home/pcadmin/Desktop/ProjectB/server/saved_images_';
 var clientFolder = '/home/pcadmin/Desktop/ProjectB/client/colour_images/';
 server.listen(3000);
@@ -37,64 +36,27 @@ app.use(function(req, res, next) {
     next();
 });
 
-deleteServerFiles();
-deleteClientFiles();
-setInterval(function(){deleteServerFiles()},1000);
-setInterval(function(){deleteClientFiles()},1000);
+
 io.on('connection', function(socket) {
-  console.log('A new WebSocket connection has been established');
+  console.log('A new WebSocket connection has been established. Please visit http://localhost:3000 to start the application');
+   socket.emit('ip',ip)
   
-  // Use these lines for saved video if the folder path is determined by IP address of the machine
-  /*chokidar.watch(serverVideoFolder, {
-	ignored:['basler_camera.py',/[\/\\]\./],
-	usePolling: true,
-	interval : 30
-   }).on('add', path=> {
-   	if(fs.statSync(path).isFile()){
-    path = new Buffer(fs.readFileSync(path)).toString("base64");
-    socket.emit('file added',path); 
-    }
-});*/
-
-
-  // Use these lines for saved images if the folder path is determined by IP address of the machine
-   /*chokidar.watch(serverImageFolder,{
-   ignored:['basler_camera.py',/[\/\\]\./],
-   usePolling: true,
-   interval : 30
-   }).on('add',path=>{
-    if(fs.statSync(path).isFile()){
-      socket.emit('image added',path);
-    }
-   });*/
-
-
   //Code for folder path chosen by Device Name button on UI
   socket.on('start files',(data)=>{
     serverImageFolder = '/home/pcadmin/Desktop/ProjectB/server/saved_images_'+data+'/';
  });
-
-socket.on("start watching",(data)=>{
-   var  watcher =  chokidar.watch(serverVideoFolder, {
+    chokidar.watch(serverVideoFolder, {
     ignored:['basler_camera.py',/[\/\\]\./],
     usePolling: true,
     interval : 25,
     persistent:true
-    });
-   if(data){
-    watcher.on('add', path=> {
+    }).on('add', path=> {
     if(fs.statSync(path).isFile()){
-    path = new Buffer(fs.readFileSync(path)).toString("base64");
-    socket.emit('file added',path); 
+    filepath = new Buffer(fs.readFileSync(path)).toString("base64");
+    socket.emit('file added',filepath); 
+    setTimeout(function(){deleteServerFiles(path)},8000);
     }
     }); 
-   }else{
-    watcher.unwatch(serverVideoFolder);
-    watcher.close();
-    
-   }   
-})
-   
    //code for saved images section:
     chokidar.watch(serverImageFolder,{
     ignored:['basler_camera.py',/[\/\\]\./],
@@ -107,25 +69,26 @@ socket.on("start watching",(data)=>{
     });
 });
 
-function deleteServerFiles(){
+function deleteServerFiles(path){
   var glob = require('glob');
-  var time = Math.round(Date.now()/1000)-2;
-          let v = serverVideoFolder+time+'*.jpg'; 
+  var time = path.split('/').pop();
+  //var time = Math.round(Date.now()/1000)-5;
+          let v = serverVideoFolder+time; 
           glob(v,function(err,files){
-          for(var i=0;i<files.length;i++){
-            if(fs.statSync(files[i]).isFile()){
+          
+            for(var i=0;i<files.length;i++){
+            if(fs.existsSync(files[i]) && fs.statSync(files[i]).isFile()){
               fs.unlinkSync(files[i]);  
               console.log("successfully removed "+files[i]);
-            }else{
-              console.log("error");
             }
-          }
-    })
-
+          }  
+          
+          
+    });
 };
-function deleteClientFiles(){
+/*function deleteClientFiles(){
   var glob = require('glob');
-  var time = Math.round(Date.now()/1000)-2;
+  var time = Math.round(Date.now()/1000)-4;
           let v = clientFolder+time+'*.jpg'; 
           glob(v,function(err,files){
           for(var i=0;i<files.length;i++){
@@ -139,8 +102,7 @@ function deleteClientFiles(){
     })
 
 };
-
-//points static path to dist:
+*///points static path to dist:
 app.use(express.static(path.join(__dirname,'dist')));
 //API paths
 app.use('/api',api);

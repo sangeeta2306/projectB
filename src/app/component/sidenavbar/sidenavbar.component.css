@@ -152,4 +152,11 @@ top: 0px;
   flex-direction: column;
   padding:5px 10px;
 }
+.btn-primary:not(:disabled):not(.disabled):focus{
+  box-shadow: 1px 2px 5px red;
+}
 
+.btn-primary:not(:disabled):not(.disabled):active{
+  background-color:red;
+  box-shadow:none;
+}

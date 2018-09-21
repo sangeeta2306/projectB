@@ -19,7 +19,6 @@ import { ImageList } from '../../model/imagelist';
 export class SidenavbarComponent implements OnInit {
 
   @ViewChild("slide") slide:ElementRef;
-  @ViewChild("playVideo") playVideo: ElementRef
   imageList: any = [];
   deviceList : any =[];
   temp : any = [];
@@ -32,39 +31,40 @@ export class SidenavbarComponent implements OnInit {
   socket:SocketIOClient.Socket;
   fileName:any=[];
   deviceName:String;
-  videoPlay:Function;
-  buttonToggle : boolean = false;
+  showName : boolean = false;
+  showAlternateImage:boolean = false;
+  btnColor:any =[];
+  ip: string;
+
+
   constructor(private imageselection: ImageselectionService,
   private sanitizer: DomSanitizer ) {
   this.socket = io.connect("http://localhost:3000/");
-
-
-    this.selectedRows=function(item:any){
+  this.fileName = '../../assets/images/no-image.jpg';
+    this.selectedRows=function(item:any,index:number){
+    this.showName = true;
     this.deviceName = item;
+    //this.btnColor[index]="red";
+    this.socket.emit('start files',item.dev_name);
     this.imageselection.getDeviceImageList(item.dev_name).subscribe(deviceImageList =>{
       this.deviceImageList = deviceImageList;
-      this.socket.emit('start files',item.dev_name);
       for(var i=0;i<this.deviceImageList.length;i++){
-         this.deviceImageList[i].file_path = this.sanitizer.bypassSecurityTrustUrl('data:image/jpeg;charset=utf-8;base64,' + this.deviceImageList[i].file_path);
+          if(!this.deviceImageList[i].fileType){
+          this.deviceImageList[i].file_path = this.sanitizer.bypassSecurityTrustUrl( '../../assets/images/corrupted-file.jpeg');
+           this.deviceImageList[i].timestamp = new Date(0).setUTCSeconds(this.deviceImageList[i].timestamp);
+          }else{
+             this.deviceImageList[i].file_path = this.sanitizer.bypassSecurityTrustUrl('data:image/jpeg;charset=utf-8;base64,' + this.deviceImageList[i].file_path);
          this.deviceImageList[i].timestamp = new Date(0).setUTCSeconds(this.deviceImageList[i].timestamp);
+          }
+          
          }
        })
     };
-
-    this.videoPlay = function(){
-      this.buttonToggle = !this.buttonToggle;
-      if(this.buttonToggle){
-        this.playVideo.nativeElement.innerHTML = "Pause";
-        this.socket.emit("start watching",this.buttonToggle);
-      }else{
-      this.socket.emit("start watching",this.buttonToggle);
-      this.playVideo.nativeElement.innerHTML = "Play";
-      }
-      
-    }
-
+ this.socket.on('ip',(data)=>{
+   this.ip = data;
+ })
   this.socket.on('file added',(data)=>{
-  this.fileName = this.sanitizer.bypassSecurityTrustUrl('data:image/jpeg;charset=utf-8;base64,' + data);
+    this.fileName = this.sanitizer.bypassSecurityTrustUrl('data:image/jpeg;charset=utf-8;base64,' + data);
   this.slide.nativeElement.src= this.fileName;
   });
 
@@ -72,6 +72,10 @@ export class SidenavbarComponent implements OnInit {
   this.socket.on('image added',(data)=>{
    this.selectedRows(this.deviceName)
   });
+
+  this.socket.on('empty dir',(data)=>{
+    this.slide.nativeElement.src = '../../assets/images/no-image.jpg';
+  })
 }
 
   
@@ -84,11 +88,14 @@ export class SidenavbarComponent implements OnInit {
   populateDeviceList(){
   this.imageselection.getDeviceList().subscribe(deviceList =>{
      this.deviceList = deviceList;
+     console.log(this.deviceList)
   })
   };
   
   ngOnInit() {
+  this.slide.nativeElement.src = '../../assets/images/no-image.jpg';
   this.populateDeviceList();
+  setInterval(()=>{this.populateDeviceList()},10000);
 }
 
 }

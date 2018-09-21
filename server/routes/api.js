@@ -3,7 +3,8 @@ const router = express.Router();
 var mysql = require('mysql');
 var fs = require('fs');
 var data ;
-
+const readChunk = require('read-chunk');
+const fileType = require('file-type');
 var connection = mysql.createConnection({
 	host: 'localhost',
 	user : 'root',
@@ -45,6 +46,7 @@ router.get('/imagelist/:id',async function(req,res){
     connection.query(sql, function(err,results,rows){
         if(err) throw console.log(err);
         for(var i=0;i<results.length;i++){
+        results[i].fileType = fileType(readChunk.sync(results[i].file_path,0,4096));
         results[i].fileName = results[i].file_path.split("/").pop(); 
         results[i].file_path = new Buffer(fs.readFileSync(results[i].file_path)).toString("base64");
       }
