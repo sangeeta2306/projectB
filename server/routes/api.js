@@ -8,7 +8,7 @@ const fileType = require('file-type');
 var connection = mysql.createConnection({
 	host: 'localhost',
 	user : 'root',
-	password : 'Newuser123',
+	password : 'root',
 	database: 'project_B_db3'
 });
 
