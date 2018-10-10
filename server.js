@@ -21,8 +21,8 @@ var ip='199';
 
 
 //var serverVideoFolder = '/home/pcadmin/Desktop/ProjectB/server/saved_video_SBC_'+ip+'/';
-var serverVideoFolder = '/home/pcadmin/Desktop/ProjectB/server/saved_video_SBC_199/';
-var serverImageFolder = '/home/pcadmin/Desktop/ProjectB/server/saved_images_';
+var serverVideoFolder = '/home/Desktop/ProjectB/server/saved_video_SBC_199/';
+var serverImageFolder = '/home/Desktop/ProjectB/server/saved_images_';
 var clientFolder = '/home/pcadmin/Desktop/ProjectB/client/colour_images/';
 server.listen(3000);
 //parsers for POST data
