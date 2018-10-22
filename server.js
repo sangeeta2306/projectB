@@ -21,9 +21,9 @@ var ip='199';
 
 
 //var serverVideoFolder = '/home/pcadmin/Desktop/ProjectB/server/saved_video_SBC_'+ip+'/';
-var serverVideoFolder = '/home/Desktop/ProjectB/server/saved_video_SBC_199/';
-var serverImageFolder = '/home/Desktop/ProjectB/server/saved_images_';
-var clientFolder = '/home/pcadmin/Desktop/ProjectB/client/colour_images/';
+var serverVideoFolder = '/home/pcadmin/Desktop/ProjectB/server/saved_video_SBC_199/';
+var serverImageFolder = '/home/pcadmin/Desktop/ProjectB/server/saved_images_SBC_199/';
+//var clientFolder = '/home/pcadmin/Desktop/ProjectB/client/colour_images/';
 server.listen(3000);
 //parsers for POST data
 var chokidar = require('chokidar');
@@ -42,9 +42,9 @@ io.on('connection', function(socket) {
    socket.emit('ip',ip)
   
   //Code for folder path chosen by Device Name button on UI
-  socket.on('start files',(data)=>{
+ /* socket.on('start files',(data)=>{
     serverImageFolder = '/home/pcadmin/Desktop/ProjectB/server/saved_images_'+data+'/';
- });
+ });*/
     chokidar.watch(serverVideoFolder, {
     ignored:['basler_camera.py',/[\/\\]\./],
     usePolling: true,
