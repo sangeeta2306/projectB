@@ -19,11 +19,8 @@ var rimraf = require('rimraf');
 //var ip= require('ip').address().split('.').pop();
 var ip='199';
 
-
-//var serverVideoFolder = '/home/pcadmin/Desktop/ProjectB/server/saved_video_SBC_'+ip+'/';
-var serverVideoFolder = '/home/pcadmin/Desktop/ProjectB/server/saved_video_SBC_199/';
-var serverImageFolder = '/home/pcadmin/Desktop/ProjectB/server/saved_images_SBC_199/';
-//var clientFolder = '/home/pcadmin/Desktop/ProjectB/client/colour_images/';
+var serverVideoFolder = path.resolve('../server/saved_video_SBC_199/');
+var serverImageFolder = path.resolve('../server/saved_images_SBC_199/');
 server.listen(3000);
 //parsers for POST data
 var chokidar = require('chokidar');
@@ -45,7 +42,7 @@ io.on('connection', function(socket) {
  /* socket.on('start files',(data)=>{
     serverImageFolder = '/home/pcadmin/Desktop/ProjectB/server/saved_images_'+data+'/';
  });*/
-    chokidar.watch(serverVideoFolder, {
+    chokidar.watch(serverVideoFolder+'/', {
     ignored:['basler_camera.py',/[\/\\]\./],
     usePolling: true,
     interval : 25,
@@ -54,11 +51,11 @@ io.on('connection', function(socket) {
     if(fs.statSync(path).isFile()){
     filepath = new Buffer(fs.readFileSync(path)).toString("base64");
     socket.emit('file added',filepath); 
-    setTimeout(function(){deleteServerFiles(path)},8000);
+    setTimeout(function(){deleteServerFiles(path)},10000);
     }
     }); 
    //code for saved images section:
-    chokidar.watch(serverImageFolder,{
+    chokidar.watch(serverImageFolder+'/',{
     ignored:['basler_camera.py',/[\/\\]\./],
     usePolling: true,
     interval : 25
@@ -73,7 +70,7 @@ function deleteServerFiles(path){
   var glob = require('glob');
   var time = path.split('/').pop();
   //var time = Math.round(Date.now()/1000)-5;
-          let v = serverVideoFolder+time; 
+          let v = serverVideoFolder+'/'+time; 
           glob(v,function(err,files){
           
             for(var i=0;i<files.length;i++){
@@ -86,23 +83,7 @@ function deleteServerFiles(path){
           
     });
 };
-/*function deleteClientFiles(){
-  var glob = require('glob');
-  var time = Math.round(Date.now()/1000)-4;
-          let v = clientFolder+time+'*.jpg'; 
-          glob(v,function(err,files){
-          for(var i=0;i<files.length;i++){
-            if(fs.statSync(files[i]).isFile()){
-              fs.unlinkSync(files[i]);  
-              console.log("successfully removed "+files[i]);
-            }else{
-              console.log("error");
-            }
-          }
-    })
-
-};
-*///points static path to dist:
+//points static path to dist:
 app.use(express.static(path.join(__dirname,'dist')));
 //API paths
 app.use('/api',api);
